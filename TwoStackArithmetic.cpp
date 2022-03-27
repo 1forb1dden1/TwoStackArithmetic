@@ -3,7 +3,7 @@
 //FileType: Source File
 //Author: Kevin Chau
 //Created: 03/24/2022
-//Last Modified: 03/27/2022 3:52PM
+//Last Modified: 03/27/2022 4:05PM
 //Description: Using Two Stacks to perform Arithmetic Operations
 */
 
@@ -103,7 +103,7 @@ void Evaluate(char& input)
           if (isdigit(input))
           {
             std::cin >> input_number;
-            NumStack.push(input_number); 
+            NumStack.push(input_number);
             Operator = OperatorStack.top(); OperatorStack.pop();
             value1 = NumStack.top(); NumStack.pop();
             value2 = NumStack.top(); NumStack.pop();
@@ -152,7 +152,7 @@ void Evaluate(char& input)
           Operator = OperatorStack.top(); OperatorStack.pop();
           value1 = NumStack.top(); NumStack.pop();
           value2 = NumStack.top(); NumStack.pop();
-          NumStack.push(compute(Operator, value1, value2));
+          NumStack.push(compute(Operator, value2, value1));
         }
       }
     }
@@ -198,18 +198,18 @@ void Evaluate(char& input)
     else if (isdigit(input))
     {
       PreviousisOperator = false;
-      std::cin >> input_number;  
+      std::cin >> input_number;
       NumStack.push(input_number);
-      input = std::cin.peek(); 
+      input = std::cin.peek();
     }
-    else if ((PreviousOperator == '-' && input == '-') && PreviousisOperator == true ) 
+    else if ((PreviousOperator == '-' && input == '-') && PreviousisOperator == true )
     {
-      OperatorStack.pop(); 
-      OperatorStack.push('+'); 
+      OperatorStack.pop();
+      OperatorStack.push('+');
       PreviousOperator = '+';
       PreviousisOperator = true;
-      input = std::cin.get(); 
-      input = std::cin.peek(); 
+      input = std::cin.get();
+      input = std::cin.peek();
     }
     else if (((PreviousOperator == '-' && input == '+') && PreviousisOperator == true) || ((PreviousOperator == '+' && input == '-') && PreviousisOperator == true))
     {
@@ -224,8 +224,8 @@ void Evaluate(char& input)
     {
       
       PreviousOperator = input; PreviousisOperator = true; OperatorStack.push(input);
-      input = std::cin.get(); 
-      input = std::cin.peek(); 
+      input = std::cin.get();
+      input = std::cin.peek();
       if (PreviousOperator == '-' && input == '(')
       {
         OperatorStack.pop();
@@ -269,7 +269,7 @@ void Evaluate(char& input)
     else
     {
       std::cin.ignore();
-      input = std::cin.peek();  
+      input = std::cin.peek();
     }
   }
   std::cout << "\n\nBoth Stacks before the final Computation\n";
@@ -284,17 +284,17 @@ void Evaluate(char& input)
     else
     {
       Operator = OperatorStack.top(); OperatorStack.pop();
-      value1 = NumStack.top(); NumStack.pop(); // top 
-      value2 = NumStack.top(); NumStack.pop(); // bottom 
+      value1 = NumStack.top(); NumStack.pop();
+      value2 = NumStack.top(); NumStack.pop();
       NumStack.push(compute(Operator, value2, value1));
     }
   }
   while ( NumStack.size() > 1)
   {
     Operator = '+';
-    value1 = NumStack.top(); NumStack.pop(); // top 
-    value2 = NumStack.top(); NumStack.pop(); // bottom 
-    NumStack.push(compute(Operator, value1, value2));
+    value1 = NumStack.top(); NumStack.pop();
+    value2 = NumStack.top(); NumStack.pop();
+    NumStack.push(compute(Operator, value2, value1));
   }
   std::cout << "\n\nFinal Answer: "; printStack(NumStack); std::cout << "\n";
 }
