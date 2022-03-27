@@ -1,3 +1,12 @@
+/*
+//FileName: TwoStackArithmetic.cpp
+//FileType: Source File
+//Author: Kevin Chau
+//Created: 03/24/2022
+//Last Modified: 03/27/2022 3:52PM
+//Description: Using Two Stacks to perform Arithmetic Operations
+*/
+
 #include <iostream>
 #include <stack>
 
@@ -29,8 +38,6 @@ void reverseStack(std::stack<T>& Stack)
 
 int compute(char Operator, int value1, int value2)
 {
-  //VALUE1 is the top or right
-  //VALUE2 is the bottom or left 
   if (Operator == '+')
   {
     return value1 + value2;
@@ -73,7 +80,6 @@ void Evaluate(char& input)
     if (input == '(')
     {
       OperatorStack.push(input);
-      std::cout << "The top of the stack: " << OperatorStack.top();
       input = std::cin.get();
       input = std::cin.peek();
       if (input == '-')
@@ -88,24 +94,21 @@ void Evaluate(char& input)
         if (isdigit(input))
         {
           PreviousisOperator = false;
-          std::cin >> input_number; // retreives and reads info. 
-          NumStack.push(input_number); // inputs the info to numstack.
-          input = std::cin.peek(); // input is now looking at the next value. }
+          std::cin >> input_number; 
+          NumStack.push(input_number); 
+          input = std::cin.peek(); 
         }
         else if (OperatorStack.top() == '*' || OperatorStack.top() == '/')
         {
-          //(2*-3)
-          //(2*3)
-          //
           if (isdigit(input))
           {
             std::cin >> input_number;
-            NumStack.push(input_number); // input number into NumStack.
+            NumStack.push(input_number); 
             Operator = OperatorStack.top(); OperatorStack.pop();
             value1 = NumStack.top(); NumStack.pop();
             value2 = NumStack.top(); NumStack.pop();
             NumStack.push(compute(Operator, value2, value1));
-            input = std::cin.peek(); // input goes to next one.
+            input = std::cin.peek();
           }
           else if (input == '-')
           {
@@ -146,16 +149,14 @@ void Evaluate(char& input)
       {
         while (OperatorStack.top() != '(')
         {
-          std::cout << "in here";
           Operator = OperatorStack.top(); OperatorStack.pop();
           value1 = NumStack.top(); NumStack.pop();
           value2 = NumStack.top(); NumStack.pop();
-          NumStack.push(compute(Operator, value2, value1));
+          NumStack.push(compute(Operator, value1, value2));
         }
-        OperatorStack.pop();
       }
     }
-    else if ((!OperatorStack.empty() && ( (OperatorStack.top() == '*' || OperatorStack.top() == '/') || OperatorStack.top() == '(') && NumStack.size() >= 1))
+    if ((!OperatorStack.empty() && ( (OperatorStack.top() == '*' || OperatorStack.top() == '/') || OperatorStack.top() == '(') && NumStack.size() >= 1))
     {
       if (OperatorStack.top() == '(')
       {
@@ -170,48 +171,45 @@ void Evaluate(char& input)
       }
       else if (isdigit(input))
       {
-        std::cin >> input_number;
-        NumStack.push(input_number); // input number into NumStack.
+        std::cin >> input_number; NumStack.push(input_number); 
         Operator = OperatorStack.top(); OperatorStack.pop();
         value1 = NumStack.top(); NumStack.pop();
         value2 = NumStack.top(); NumStack.pop();
         NumStack.push(compute(Operator, value2, value1));
-        input = std::cin.peek(); // input goes to next one.
-      }
-      else if (input == '-') // if it is negative
-      {
-        std::cin >> input_number;
         input = std::cin.peek();
-        NumStack.push(input_number);
-        PreviousisOperator = true;
+      }
+      else if (input == '-')
+      {
+        NumStack.push(-1);
+        OperatorStack.push('*');
+        input = std::cin.get();
+        input = std::cin.peek();
       }
       else if (input == '(')
       {
         OperatorStack.push(input);
-        input = std::cin.get();
-        input = std::cin.peek();
       }
       else 
       {
         input = std::cin.get();
-        input = std::cin.peek(); // go to next number
+        input = std::cin.peek(); 
       }
     }
     else if (isdigit(input))
     {
       PreviousisOperator = false;
-      std::cin >> input_number; // retreives and reads info. 
-      NumStack.push(input_number); // inputs the info to numstack.
-      input = std::cin.peek(); // input is now looking at the next value.
+      std::cin >> input_number;  
+      NumStack.push(input_number);
+      input = std::cin.peek(); 
     }
-    else if ((PreviousOperator == '-' && input == '-') && PreviousisOperator == true ) // and if 
+    else if ((PreviousOperator == '-' && input == '-') && PreviousisOperator == true ) 
     {
-      OperatorStack.pop(); //pop the previous minus sign.
-      OperatorStack.push('+'); // input the plus sign.
+      OperatorStack.pop(); 
+      OperatorStack.push('+'); 
       PreviousOperator = '+';
       PreviousisOperator = true;
-      input = std::cin.get(); // retreives the current input and goes next.
-      input = std::cin.peek(); // input is now peeking at the next one.
+      input = std::cin.get(); 
+      input = std::cin.peek(); 
     }
     else if (((PreviousOperator == '-' && input == '+') && PreviousisOperator == true) || ((PreviousOperator == '+' && input == '-') && PreviousisOperator == true))
     {
@@ -224,9 +222,10 @@ void Evaluate(char& input)
     }
     else if (input == '+' || input == '-' || input == '*' || input == '/')
     {
-      PreviousOperator = input; PreviousisOperator = true; OperatorStack.push(input); 
-      input = std::cin.get(); // input reads and goes next
-      input = std::cin.peek(); // input is now next. 
+      
+      PreviousOperator = input; PreviousisOperator = true; OperatorStack.push(input);
+      input = std::cin.get(); 
+      input = std::cin.peek(); 
       if (PreviousOperator == '-' && input == '(')
       {
         OperatorStack.pop();
@@ -234,6 +233,29 @@ void Evaluate(char& input)
         OperatorStack.push('*');
         OperatorStack.push('(');
         PreviousOperator = '('; PreviousisOperator = false;
+      }
+      else if (PreviousOperator == '*' || PreviousOperator == '/')
+      {
+        if (input == '-' ) 
+        {
+          NumStack.push(1);
+          OperatorStack.push('*');
+          value1 = NumStack.top(); NumStack.pop();
+          value2 = NumStack.top(); NumStack.pop();
+          Operator = OperatorStack.top(); OperatorStack.pop();
+          NumStack.push(compute(Operator, value1, value2));
+        }
+        else if (isdigit(input))
+        {
+          PreviousisOperator = false;
+          std::cin >> input_number;
+          NumStack.push(input_number);
+          input = std::cin.peek();
+          Operator = OperatorStack.top(); OperatorStack.pop();
+          value1 = NumStack.top(); NumStack.pop();
+          value2 = NumStack.top(); NumStack.pop();
+          NumStack.push(compute(Operator, value2, value1));
+        }
       }
       else if ( (PreviousOperator == '*' || PreviousOperator =='/') && (input == '('))
       {
@@ -246,15 +268,13 @@ void Evaluate(char& input)
     }
     else
     {
-      std::cin.ignore(); // ignore the current value 
-      input = std::cin.peek(); // goes next. 
+      std::cin.ignore();
+      input = std::cin.peek();  
     }
   }
-
-  std::cout << "\n\nThis is post Loop before Computation\n";
+  std::cout << "\n\nBoth Stacks before the final Computation\n";
   std::cout << "\nNumber Stack: "; printStack(NumStack);
   std::cout << "\nOperator Stack: "; printStack(OperatorStack);
-
   while (!OperatorStack.empty() && NumStack.size() > 1)
   {
     if (OperatorStack.top() == '(' || OperatorStack.top() == ')')
@@ -269,18 +289,14 @@ void Evaluate(char& input)
       NumStack.push(compute(Operator, value2, value1));
     }
   }
-
-  //while ( NumStack.size() > 1)
-  //{
-  //  Operator = '+';
-  //  value1 = NumStack.top(); NumStack.pop(); // top 
-  //  value2 = NumStack.top(); NumStack.pop(); // bottom 
-  //  NumStack.push(compute(Operator, value1, value2));
-  //}
-
-  std::cout << "\n\nThis is the result of computing. \n";
-  std::cout << "\nNumber Stack: "; printStack(NumStack);
-  std::cout << "\nOperator Stack: "; printStack(OperatorStack);
+  while ( NumStack.size() > 1)
+  {
+    Operator = '+';
+    value1 = NumStack.top(); NumStack.pop(); // top 
+    value2 = NumStack.top(); NumStack.pop(); // bottom 
+    NumStack.push(compute(Operator, value1, value2));
+  }
+  std::cout << "\n\nFinal Answer: "; printStack(NumStack); std::cout << "\n";
 }
 
 int main()
