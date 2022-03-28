@@ -3,7 +3,10 @@ The purpose of this program is to demonstrate usage of two stacks through arithm
 <br/>
 This program can take arithmetic operations including '+' '-' '*' '/'
 <br/>
-The program takes any value from 0-9. 
+This program can handle parenthesis ( and )
+<br/>
+The program takes any value from 0-9.
+<br/>
 
 # Steps to Start 
 1. Open an IDE 
